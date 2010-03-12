@@ -1,3 +1,4 @@
+require 'merb-core'
 require 'merb-assets/assets'
 require 'merb-assets/assets_mixin'
 

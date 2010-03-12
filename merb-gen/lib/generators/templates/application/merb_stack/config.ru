@@ -1,16 +1,23 @@
 begin
-  # Load the bundler environment from #{Merb.root}/gems/environment.rb
-  require File.join(File.dirname(__FILE__), "gems", "environment")
+  # Try to require the preresolved locked set of gems.
+  require File.expand_path('../.bundle/environment', __FILE__)
 rescue LoadError
-  # Default to using system rubygems if there's no bundle detected
+  # Fall back on doing an unlocked resolve at runtime.
   require "rubygems"
+  require "bundler"
+  Bundler.setup
 end
 
 require 'merb-core'
 
-Merb::Config.setup(:merb_root   => File.expand_path(File.dirname(__FILE__)), 
-                   :environment => ENV['RACK_ENV'])
+Merb::Config.setup(
+  :merb_root   => File.expand_path(File.dirname(__FILE__)),
+  :environment => ENV['RACK_ENV']
+)
+
 Merb.environment = Merb::Config[:environment]
-Merb.root = Merb::Config[:merb_root]
+Merb.root        = Merb::Config[:merb_root]
+
 Merb::BootLoader.run 
+
 run Merb::Rack::Application.new
