@@ -411,28 +411,41 @@ class Merb::BootLoader::Dependencies < Merb::BootLoader
   # Load each the dependencies defined in the Merb::Config[:gemfile] 
   # using the bundler gem's Bundler::Environment.load
   #
+  # Load each the dependencies defined in the Merb::Config[:gemfile] 
+  # using the bundler gem's Bundler::require_env
+  # 
+  # Falls back to rubygems if no bundler environment exists
+  # 
   # ==== Returns
   # nil
   #
   # :api: private
   def self.load_dependencies
-    if Merb.verbose_logging?
+    begin
+
+      gemfile = Merb.root / (Merb::Config[:gemfile] || 'Gemfile')
+      Merb::Config[:gemfile] = File.exists?(gemfile) ? gemfile : nil
+
+      # Try to load the bundled environment from Merb::Config[:gemenv]
+      # default to ./gems/environment.rb
+      require Merb.root / (Merb::Config[:gemenv] || "gems" / "environment")
+
+      # Require the bundler environment
+      Bundler.require_env(Merb.environment)
+    rescue LoadError
+      # Default to using system rubygems if not bundled
+      require "rubygems"
       if Merb::Config[:gemfile]
-        Merb.logger.debug!("Loading Gemfile from #{Merb::Config[:gemfile]}")
+        require "bundler"
+        Merb.logger.debug!("Loading Gemfile from #{Merb::Config[:gemfile]}") if Merb.verbose_logging?
+        Bundler::Dsl.load_gemfile(Merb::Config[:gemfile]).require_env(Merb.environment)
       else
-        Merb.logger.debug!("Loading default Gemfile from Merb.root/Gemfile")
+        Merb.logger.warn!("Couldn't find a Gemfile. No dependencies will be loaded.")
       end
     end
-
-    Bundler::Environment.load(Merb::Config[:gemfile]).require_env(Merb.environment)
-    nil
-  rescue Bundler::DefaultManifestNotFound => e
-    Merb.logger.warn! "You didn't create Bundler Gemfile manifest or you " \
-                       "are not in a Merb application. If you are trying to " \
-                       "create a new merb application, use merb-gen app."
     nil
   end
-
+  
   # Requires json or json_pure.
   #
   # ==== Returns
@@ -484,7 +497,7 @@ class Merb::BootLoader::Dependencies < Merb::BootLoader
   #
   # :api: private
   def self.set_encoding
-    unless Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("1.9")
+    unless RUBY_VERSION >= '1.9'
       $KCODE = 'UTF8' if $KCODE == 'NONE' || $KCODE.blank?
     end
     

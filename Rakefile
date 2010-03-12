@@ -23,7 +23,7 @@ merb_stack_gems = [
 
 
 def gem_command(command)
-  sh "#{RUBY} -S #{(ENV['JEWELER_INSTALL_COMMAND'] || 'gem')} #{command}"
+  sh "#{RUBY} -S gem #{command}"
 end
 
 def rake_command(command)

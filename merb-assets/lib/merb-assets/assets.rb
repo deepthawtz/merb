@@ -49,7 +49,7 @@ module Merb
         end
 
         # prepend asset type's folder path
-        filename = "/#{asset_type}s/#{filename}" unless filename.start_with?("/")
+        filename = "/#{asset_type}s/#{filename}" unless filename.index("/") == 0
 
         if local_path
           return "public#{filename}"

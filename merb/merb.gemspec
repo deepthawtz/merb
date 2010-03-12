@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["The Merb Team"]
-  s.date = %q{2009-11-06}
+  s.date = %q{2009-11-20}
   s.description = %q{The Merb stack}
   s.email = %q{team@merbivore.com}
   s.extra_rdoc_files = [
@@ -55,8 +55,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<dm-validations>, ["~> 0.10"])
       s.add_runtime_dependency(%q<dm-sweatshop>, ["~> 0.10"])
       s.add_runtime_dependency(%q<dm-serializer>, ["~> 0.10"])
-      s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_development_dependency(%q<webrat>, [">= 0.3.1"])
+      s.add_runtime_dependency(%q<dm-constraints>, ["~> 0.10"])
     else
       s.add_dependency(%q<merb-core>, ["= 1.1.0.pre"])
       s.add_dependency(%q<merb-action-args>, ["= 1.1.0.pre"])
@@ -78,8 +77,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<dm-validations>, ["~> 0.10"])
       s.add_dependency(%q<dm-sweatshop>, ["~> 0.10"])
       s.add_dependency(%q<dm-serializer>, ["~> 0.10"])
-      s.add_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_dependency(%q<webrat>, [">= 0.3.1"])
+      s.add_dependency(%q<dm-constraints>, ["~> 0.10"])
     end
   else
     s.add_dependency(%q<merb-core>, ["= 1.1.0.pre"])
@@ -102,8 +100,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<dm-validations>, ["~> 0.10"])
     s.add_dependency(%q<dm-sweatshop>, ["~> 0.10"])
     s.add_dependency(%q<dm-serializer>, ["~> 0.10"])
-    s.add_dependency(%q<rspec>, [">= 1.2.9"])
-    s.add_dependency(%q<webrat>, [">= 0.3.1"])
+    s.add_dependency(%q<dm-constraints>, ["~> 0.10"])
   end
 end
 
